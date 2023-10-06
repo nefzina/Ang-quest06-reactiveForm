@@ -1,0 +1,67 @@
+<form
+  (ngSubmit)="searchForm.valid && onSubmit()"
+  [formGroup]="searchForm"
+  #myForm="ngForm"
+>
+  <div formGroupName="searchBy">
+    <fieldset>
+      <Label for="id">Identifiant</Label>
+      <input type="text" id="id" formControlName="identifier" />
+    </fieldset>
+
+    <fieldset>
+      <Label for="title">Titre</Label>
+      <input type="text" id="title" formControlName="title" />
+
+      <div
+        *ngIf="
+          (searchForm.get('searchBy')?.hasError('isRequired') &&
+            searchForm.get('searchBy')?.get('identifier')?.touched &&
+            searchForm.get('searchBy')?.get('title')?.touched) ||
+          myForm.submitted
+        "
+      >
+        <small>{{ searchForm.get("searchBy")?.getError("isRequired") }}</small>
+      </div>
+    </fieldset>
+  </div>
+  <fieldset>
+    <Label for="type">Type</Label>
+    <select id="type" formControlName="type">
+      <option value="film">film</option>
+      <option value="série">série</option>
+      <option value="épisode">épisode</option>
+    </select>
+  </fieldset>
+  <fieldset>
+    <Label for="releaseYear">Année de sortie</Label>
+    <input type="number" id="releaseYear" formControlName="releaseYear" />
+    <div>
+      <small
+        *ngIf="
+          (searchForm.get('releaseYear')?.hasError('required') &&
+            searchForm.get('releaseYear')?.touched) ||
+          myForm.submitted
+        "
+        >Ce champ est obligatoire</small
+      >
+
+      <small *ngIf="searchForm.get('releaseYear')?.hasError('min')">{{
+        searchForm.get("releaseYear")?.getError("min")
+      }}</small>
+    </div>
+  </fieldset>
+  <fieldset>
+    <Label for="sheet">Fiche</Label>
+    <!-- [disabled]="searchForm.get('searchBy')?.get('identifier')?.invalid" -->
+    <select
+      id="sheet"
+      formControlName="sheet"
+      >
+      <option value="complète">complète</option>
+      <option value="courte">courte</option>
+    </select>
+  </fieldset>
+
+  <button type="submit">recherche</button>
+</form>
